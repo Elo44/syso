@@ -19,28 +19,25 @@ export default class Algorithm extends React.Component {
 				!rule['formule'] ||
 				path(['formule', 'explanation', 'une possibilité'], rule)
 
+		let conditionKeys = [
+			'parentDependency',
+			'applicable si',
+			'non applicable si'
+		]
 		return (
 			<div id="algorithm">
 				<section id="rule-rules" className={classNames({ showValues })}>
 					<ShowValuesProvider value={showValues}>
-						{do {
-							// TODO ce let est incompréhensible !
-							let applicabilityMecanisms = values(rule).filter(
-								v => v && v['rulePropType'] == 'cond'
-							)
-							applicabilityMecanisms.length > 0 && (
-								<section id="declenchement">
-									<h2>
-										<Trans>Déclenchement</Trans>
-									</h2>
-									<ul>
-										{applicabilityMecanisms.map(v => (
-											<li key={v.name}>{makeJsx(v)}</li>
-										))}
-									</ul>
-								</section>
-							)
-						}}
+						<section id="declenchement">
+							<h2>
+								<Trans>Déclenchement</Trans>
+							</h2>
+							<ul>
+								{conditionKeys.map(
+									k => rule[k] && <li key={k}>{makeJsx(rule[k])}</li>
+								)}
+							</ul>
+						</section>
 						{!ruleWithoutFormula ? (
 							<section id="formule">
 								<h2>

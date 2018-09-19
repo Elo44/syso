@@ -615,6 +615,7 @@
   exemples:
     - nom: "exemple 1"
       situation:
+        CDD: oui
         indemnités salarié CDD: 100
         CIF: 100
         majoration chômage: 90
@@ -638,6 +639,7 @@
   description: | 
     Certains dirigeants d'entreprise (c'est notamment le cas pour les SASU) sont considérés par la sécurité sociale comme assimilés aux salariés. Ils sont alors au régime général de la sécurité sociale. 
   question: Le salarié est-il considéré comme "assimilé salarié" ?
+  par défaut: non
   références: 
     Le régime des dirigeants: https://www.urssaf.fr/portail/home/employeur/creer/choisir-une-forme-juridique/le-statut-du-dirigeant/les-dirigeants-rattaches-au-regi.html
 
@@ -647,6 +649,7 @@
   description: | 
     Par défaut, faire travailler quelqu'un en France établit auutomatiquement un CDI à temps plein.
     Certaines situations exceptionnelles permettent aux employeurs de prévoir une date de fin. Le contrat, qui est alors nécessaire, mentionne cette date d fin.
+  par défaut: non
   # TODO: règle de type : il faut q'un motif et une durée soient sélectionnés pour qu'un contrat soit un CDD. Cela revient à dire que les variables CDD et motif sont obligatoires *dans le contexte* de leur attache
 #   implique:
 #     - emploi temporaire

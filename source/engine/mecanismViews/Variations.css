@@ -1,10 +1,10 @@
-.variations > ul {
-	margin-left: 0.6em;
+.mecanism .variationsList {
+	margin-left: 1em;
 }
-.variations > ul > li {
+.mecanism .variationsList > li {
 	margin-bottom: 1em;
 	list-style: circle;
 }
-.variations > ul > li.satisfied .consequence {
+.mecanism .variationsLists > li.satisfied .consequence {
 	background: yellow;
 }

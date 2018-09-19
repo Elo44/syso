@@ -11,7 +11,7 @@ export default function Variations(nodeValue, explanation) {
 			name="variations"
 			value={nodeValue}
 			child={
-				<ul>
+				<ul className="variationsList">
 					{explanation.map(({ condition, consequence, satisfied }) => (
 						<li
 							className={classNames('variation', { satisfied })}

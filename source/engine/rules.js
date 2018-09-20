@@ -52,8 +52,11 @@ export let enrichRule = (rule, sharedData = {}) => {
 		defaultValue = rule['par défaut'],
 		examples = rule['exemples'],
 		icon = rule['icônes'],
-		booleanNamespace =
-			rule.question && (!rule.format || rule.format === 'booléen')
+		calculableNamespace =
+			rule.question ||
+			rule['non applicable si'] ||
+			rule['applicable si'] ||
+			rule.formule
 
 	return {
 		...rule,
@@ -68,7 +71,7 @@ export let enrichRule = (rule, sharedData = {}) => {
 		raw: rule,
 		examples,
 		icon,
-		booleanNamespace
+		calculableNamespace
 	}
 }
 

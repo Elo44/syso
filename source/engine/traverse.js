@@ -18,7 +18,8 @@ import {
 	merge,
 	keys,
 	is,
-	T
+	T,
+	isEmpty
 } from 'ramda'
 import { Node } from './mecanismViews/common'
 import {
@@ -169,14 +170,12 @@ export let treatRuleRoot = (rules, rule) => {
 		return { ...evaluated, nodeValue, isApplicable, missingVariables }
 	}
 
-	// A parent dependency means that one of a rule's parents is a boolean question
-	// When the question is resolved to false, then the whole branch under it is disactivate, non applicable
+	// A parent dependency means that one of a rule's parents is not just a namespace holder, it is calculable, so it can be false
+	// When it is resolved to false, then the whole branch under it is disactivate, non applicable
 	// It lets those children omit parent applicability tests
-	let parentDependencies = ruleParents(rule.dottedName)
-			.reverse()
-			.map(joinName),
+	let parentDependencies = ruleParents(rule.dottedName).map(joinName),
 		parentDependency = parentDependencies.find(
-			parent => rules.find(r => r.dottedName === parent)?.booleanNamespace
+			parent => rules.find(r => r.dottedName === parent)?.calculableNamespace
 		)
 
 	let parsedRoot = evolve({
@@ -186,18 +185,25 @@ export let treatRuleRoot = (rules, rule) => {
 		// condition d'applicabilité de la règle
 		parentDependency: parent => {
 			let evaluate = (cache, situationGate, parsedRules, node) => {
+				let cpd = cache.checkingParentDependencies || []
+				if (cpd.includes(rule.dottedName))
+					return rewriteNode(node, true, null, {})
+
 				let explanation = evaluateNode(
-						cache,
+						{
+							...cache,
+							checkingParentDependencies: [...cpd, rule.dottedName]
+						},
 						situationGate,
 						parsedRules,
 						node.explanation
 					),
-					[nodeValue, missingVariables] =
-						explanation.nodeValue === null
-							? [null, { [explanation.dottedName]: 1 }]
-							: explanation.nodeValue === false
-								? [false, {}]
-								: [true, {}]
+					[nodeValue, missingVariables] = !isEmpty(explanation.missingVariables)
+						? [null, { [explanation.dottedName]: 1 }]
+						: explanation.explanation.isApplicable === false ||
+						  explanation.nodeValue == false
+							? [false, {}]
+							: [true, {}]
 
 				return rewriteNode(node, nodeValue, explanation, missingVariables)
 			}

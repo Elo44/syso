@@ -198,8 +198,10 @@ export let treatRuleRoot = (rules, rule) => {
 						parsedRules,
 						node.explanation
 					),
+					variant =
+						explanation.explanation.formule?.explanation?.['une possibilité'],
 					[nodeValue, missingVariables] = !isEmpty(explanation.missingVariables)
-						? [null, { [explanation.dottedName]: 1 }]
+						? [null, variant ? {} : { [explanation.dottedName]: 1 }]
 						: explanation.explanation.isApplicable === false ||
 						  explanation.nodeValue == false
 							? [false, {}]
